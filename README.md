@@ -141,7 +141,7 @@ Las líneas base se identificarán con la siguiente etiqueta: LB-G2-\<NroLineaBa
 | MaterialesAdicionales                  | ISW_MA_\<NombreArchivo>.pdf                                             |         ISW_Grupo2_2025_4k1/MaterialClases/MaterialesAdicionales |
 | TemplateParaTrabajosPracticos | ISW_TempTP_\<NombreTemplate>_<Año>.pdf                                    |         ISW_Grupo2_2025_4k1/MaterialClases/TemplateParaTrabajosPracticos |
 |TemplateParaParciales | ISW_TempParc_\<NroParcial>_<Año>.pdf                                    |         ISW_Grupo2_2025_4k1/MaterialClases/TemplateParaYParciales |                                         |                                   |          |
-| NotasDeClases | ISW_Notas_\<Titulo> | ISW_Grupo2_2025_4k1/NotasDeClases/\<SubcarpetaDeMiembro>
+| NotasDeClases | ISW_Notas_\<Titulo>.pdf | ISW_Grupo2_2025_4k1/NotasDeClases/\<SubcarpetaDeMiembro>
 | PlanificacionDeLaMateria                | ISW_\<NombreArchivo>.pdf                                                |         ISW_Grupo2_2025_4k1/PlanificacionDeLaMateria |
 |CronogramaDeClases |ISW_2025_4K1_\<NombreArchivo>.xlsx |ISW_Grupo2_2025_4k1/PlanificacionDeLaMateria
 | PresentacionesDeClases                  | ISW_\<NúmeroDePresentación>_<NombreDePresentación>.pdf                  |         ISW_Grupo2_2025_4k1/PresentacionesDeClases |

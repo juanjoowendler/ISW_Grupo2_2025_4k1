@@ -136,7 +136,8 @@ Las líneas base se identificarán con la siguiente etiqueta: LB-G2-\<NroLineaBa
 | Ítem                                    | Regla de Nombrado                                                         |   Ubicación |
 |:----------------------------------------|:--------------------------------------------------------------------------|:------------|
 | Bibliografía                            | ISW_B_\<NombreCarpeta>_\<NombreLibro>.pdf                  |         ISW_Grupo2_2025_4k1/Bibliografia/\<Tema>|
-| CasosDeEstudio                          | ISW_CDE_\<NombreArchivo>_\<Año>.pdf                       | ISW_Grupo2_2025_4k1/CasosDeEstudio\/Resoluciones|
+| CasosDeEstudio                          | ISW_CDE_\<NombreArchivo>_\<Año>.pdf                       | ISW_Grupo2_2025_4k1/CasosDeEstudio|
+| Resoluciones | ISW_Resolucion_\<Autor>_\<TituloCasoDeEstudio>.pdf | ISW_Grupo2_2025_4k1/CasoDeEstudio/Resoluciones |
 | Clases Grabadas                         | ISW_Links_ClasesGrabadas_\<Curso>_\<Año>.xlsx                             |         ISW_Grupo2_2025_4k1/ClasesGrabadas |
 | MaterialesAdicionales                  | ISW_MA_\<NombreArchivo>.pdf                                             |         ISW_Grupo2_2025_4k1/MaterialClases/MaterialesAdicionales |
 | TemplateParaTrabajosPracticos | ISW_TempTP_\<NombreTemplate>_<Año>.pdf                                    |         ISW_Grupo2_2025_4k1/MaterialClases/TemplateParaTrabajosPracticos |

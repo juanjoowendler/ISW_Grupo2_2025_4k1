@@ -164,5 +164,62 @@ implementan medidas de respaldo y recuperación ante desastres para garantizar l
 software. Es el ambiente en el que el software está funcionando. **Las pruebas de aceptación se llevan a cabo en el ambiente de preproducción o en un entorno similar al de producción (en el ambiente de prueba)**
 
 ---
+## Casos de Prueba
+
+El testing exhaustivo de TODAS las opciones del software no es posible, es inviable, es sumamente caro.
+Entre el 20% y el 50% del costo de software es en testing.
+
+Un caso de prueba (CP) Set de condiciones o variables bajo las cuales un tester determinará si el software está funcionando correctamente o no. Incluye las entradas correspondientes y el resultado esperado.
+
+El propósito de diseñar casos de prueba es encontrar el subconjunto de todos los casos que tienen mayor probabilidad de detectar el mayor numero posible de defectos.
+
+Buena definición de casos de prueba nos ayuda a **reproducir** defectos. Utiliza datos específicos, como por ejemplo “ingresa el usuario ‘juan@gmail.com’” en lugar de “ingresa el email del usuario”.
+
+- Objetivo: maximizar errores encontrados
+- Criterio: en forma completa
+- Restricción: con el mínimo esfuerzo y tiempo
+
+Un caso de prueba es la unidad de la actividad de la prueba. Consta de tres partes:
+
+1. Objetivo: la característica del sistema a comprobar
+2. Datos de entrada y de ambiente: datos a introducir al sistema que se encuentra en condiciones preestablecidas.
+3. Comportamiento esperado: La salida o la acción esperada en el sistema de acuerdo a los
+requerimientos del mismo.
+
+### Generación de Casos de Prueba
+
+- Ninguna técnica es completa, solucionan distintos problemas
+- Lo mejor es combinar varias de estas técnicas para complementar las ventajas de cada una
+- Depende del código a testear
+- Sin requerimientos todo es mucho más difícil
+- Tener en cuenta la conjetura de defectos
+- Ser sistemático y documentar las suposiciones sobre el comportamiento o el modelo de fallas
+
+Se pueden derivar casos de prueba desde:
+
+- Documentos del cliente
+- Información de relevamiento
+- Requerimientos
+- Especificaciones de programación
+- Código
+
+### Condiciones de Prueba
+
+- Esta es la reacción esperada de un sistema frente a un estímulo particular, este estímulo está constituido por las distintas entradas.
+- Una condición de prueba debe ser probada por al menos un caso de prueba
+- Se definen antes que los casos de prueba
+
+## Métodos
+
+Como el tiempo y el presupuesto es limitado, se deben utilizar métodos que prueben la mayor cantidad de funcionalidades con la menor cantidad de pruebas.
+
+- El documento usado para asegurarse que los requerimientos son cubiertos cuando se escriben los test cases es la **matriz de trazabilidad**.
+
+## CAJA BLANCA vs CAJA NEGRA
+
+| **CAJA BLANCA** | **CAJA NEGRA** |
+|------------------|----------------|
+| Testing basado en el analisis de la especificacion de una porcion del software sin referencia a su estructura interna. Definimos entradas y su resultado esperado, sin conocer el código. | Esta tecnica de testing examina la estructura basica de un programa y deriva los datos de testeo desde la logica del programa, asegurandose que todas las sentencias y condiciones se ejecutan al menos una vez. Se basan en el análisis de la estructura interna del software o un componente del software. |
+| Se clasifican en: **Basado en especificaciones:** Partición de Equivalencias - Análisis de valores límites- etc. **Basados en la experiencia (no trabajamos esto en el práctico)**: Adivinanza de Defectos - Testing Exploratorio | Hay distintos métodos, algunos de ellos son: COBERTURA DE ENUNCIADOS O CAMINOS BASICOS - COBERTURA DE SENTENCIAS - COBERTURA DE DECISIÓN - COBERTURA DE CONDICIÓN - COBERTURA MÚLTIPLE |
 
 

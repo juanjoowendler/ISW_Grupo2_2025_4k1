@@ -27,3 +27,4 @@ actividad no está disponible (falla)
 - Probar inscribirse a una actividad sin aceptar los términos y condiciones de la actividad (falla)
 - Probar inscribirse a una actividad sin ingresar el talle de la vestimenta requerido por la actividad
 (falla)
+

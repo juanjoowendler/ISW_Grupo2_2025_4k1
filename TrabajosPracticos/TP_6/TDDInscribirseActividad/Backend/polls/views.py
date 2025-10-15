@@ -1,24 +1,8 @@
 from django.http import HttpResponse
-
-actividades = [{
-        "id_actividad":1,
-        "tipo":"Palestra",
-        "hora":"16:30",
-        "inscriptos":4,
-    },{
-        "id_actividad":2,
-        "tipo":"Safari",
-        "hora":"14:30",
-        "inscriptos":7
-    },{
-        "id_actividad":3,
-        "tipo":"Tirolesa",
-        "hora":"16:00",
-        "inscriptos":0
-        }]
+from .models import Actividad, Inscripcion
 
 # Create your views here.
 def get_actividades(request):
-    response = HttpResponse(actividades)
+    response = HttpResponse([f"{a}\n\n" for a in Actividad.objects.all()])
     response.status_code = 200
     return response

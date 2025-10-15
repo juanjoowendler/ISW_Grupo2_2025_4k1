@@ -1,15 +1,7 @@
 from django.db import models
 
 # Create your models here.
-'''
-            "id_actividad":data[0]["id_actividad"],
-            "nombre":"Emanuel Scrosati",
-            "DNI":45074602,
-            "edad":22,
-            "cant_personas":1,
-            "talle":"XL",
-            "terminosYcondiciones":True
-'''
+
 class Inscripcion(models.Model):
     id = models.AutoField(primary_key=True)
     id_actividad = models.IntegerField()

@@ -1,0 +1,1 @@
+Jira donde estan la lista de actividades divididas y definidas: https://sebastiansidorowicz.atlassian.net/jira/software/projects/TDD/boards/1/backlog?epics=visible&selectedIssue=TDD-45&atlOrigin=eyJpIjoiOWEwODk1ZWE2MDkzNDlkMGJhOTg2NzcxOTI1ZDMwZmUiLCJwIjoiaiJ9 

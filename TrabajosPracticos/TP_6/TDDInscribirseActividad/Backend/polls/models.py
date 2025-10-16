@@ -22,6 +22,8 @@ class Actividad(models.Model):
     fecha = models.DateField()
     hora = models.TimeField()
     cupo_disponible = models.IntegerField()
+
+
     
     def __str__(self):
         return self.tipo

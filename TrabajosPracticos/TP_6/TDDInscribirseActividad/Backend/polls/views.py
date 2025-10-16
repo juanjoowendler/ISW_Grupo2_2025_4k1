@@ -86,6 +86,11 @@ def post_inscripcion(request):
         # Validar talle si la actividad lo requiere
         if actividad.tipo.lower() in ["tirolesa", "palestra"] and not data.get("talle"):
             return JsonResponse({"error": "Debe ingresar el talle de vestimenta"}, status=400)
+        
+        # Validar que el talle sea uno válido si se proporciona
+        talles_validos = ["XS", "S", "M", "L", "XL", "XXL"]
+        if actividad.tipo.lower() in ["tirolesa", "palestra"] and actividad.talle and data.get("talle") not in talles_validos:
+            return JsonResponse({"error": "El talle proporcionado no es válido"}, status=400)
 
         # Crear inscripción
         inscripcion = Inscripcion.objects.create(

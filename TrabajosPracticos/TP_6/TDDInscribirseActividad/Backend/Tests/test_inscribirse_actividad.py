@@ -4,7 +4,7 @@ import requests
 
 class TestInscribirseActividad:
 
-    PORT = 3001
+    PORT = 6009
     API_URL = f'http://localhost:{PORT}/api'
     
     def test_inscribirse_a_actividad_con_cupos_disponibles_success(self):

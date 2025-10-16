@@ -31,6 +31,6 @@ class Actividad(models.Model):
     def esta_disponible(self):
         hoy = timezone.now().date()
         cinco_minutos_despues = (datetime.datetime.now() + datetime.timedelta(minutes=5)).time()
-        return self.cupo_disponible > 0 and self.fecha >= hoy and self.hora >= cinco_minutos_despues
+        return self.cupo_disponible > 0 and (self.fecha > hoy or self.fecha == hoy and self.hora >= cinco_minutos_despues)
     
     

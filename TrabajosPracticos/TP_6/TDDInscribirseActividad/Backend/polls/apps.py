@@ -13,17 +13,11 @@ class PollsConfig(AppConfig):
             return False
         return day.weekday() != 0 # Devuelve False si es Lunes, True si no lo es
 
-    def ready(self):
-        # Crear actividades al iniciar la app (si es necesario).
-        # Se rodea en try/except para no romper migraciones o cuando la BD aún no está lista.
-
-        try:
-            Actividad = self.get_model('Actividad')
-            today = timezone.now().date()
-            # Cambiar la condición según la intención; aquí se crea sólo si NO hay actividades para hoy
-            if Actividad.objects.filter(fecha=today).count() == 0 and self.abre(today):
+    def crear_actividades(self, day, Actividad):
+        # Cambiar la condición según la intención; aquí se crea sólo si NO hay actividades para hoy
+            if Actividad.objects.filter(fecha=day).count() == 0 and self.abre(day):
                 hora = datetime.time(hour=9)
-                fecha = today.strftime("%d/%m/%Y")
+                fecha = day.strftime("%Y-%m-%d")
                 for _ in range(18):
                     safari = Actividad(
                         tipo="Safari",
@@ -60,6 +54,17 @@ class PollsConfig(AppConfig):
 
                     # avanzar 30 minutos
                     hora = (datetime.datetime.combine(datetime.date.today(), hora) + datetime.timedelta(minutes=30)).time()
+    
+    def ready(self):
+        # Crear actividades al iniciar la app (si es necesario).
+        # Se rodea en try/except para no romper migraciones o cuando la BD aún no está lista.
+
+        try:
+            Actividad = self.get_model('Actividad')
+            today = timezone.now().date()
+            self.crear_actividades(today, Actividad)
+            self.crear_actividades(today + datetime.timedelta(days=1), Actividad)
+            
         except (OperationalError, ProgrammingError):
             # DB no lista (ej. durante migrate) — no hacer nada
             pass

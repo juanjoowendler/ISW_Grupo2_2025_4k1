@@ -1,0 +1,64 @@
+:root {
+  --verde-oscuro: #1b5e20;
+  --verde-principal: #2e7d32;
+  --verde-claro: #81c784;
+  --verde-suave: #e8f5e9;
+  --texto-oscuro: #1b3b1a;
+  --blanco: #ffffff;
+  --gris: #f5f5f5;
+
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+  color: var(--texto-oscuro);
+}
+
+h1, h2, h3 {
+  color: var(--verde-principal);
+}
+
+a {
+  color: var(--verde-principal);
+  text-decoration: none;
+  font-weight: 500;
+}
+a:hover {
+  color: var(--verde-oscuro);
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.8em 1.6em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: var(--verde-principal);
+  color: var(--blanco);
+  transition: all 0.3s ease;
+}
+button:hover {
+  background-color: var(--verde-oscuro);
+  transform: scale(1.03);
+}
+
+input, select {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  width: 100%;
+  font-size: 1em;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+input:focus, select:focus {
+  border-color: var(--verde-principal);
+}

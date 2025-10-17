@@ -1,6 +1,6 @@
 // src/views/LoginView.jsx
 import Login from "../components/Login";
-import "../components/Login.css";
+import "../style/login.css";
 
 export default function LoginView() {
   return (

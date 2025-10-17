@@ -1,6 +1,6 @@
 // src/views/RegistroView.jsx
 import Registro from "../components/Registro";
-import "../components/Registro.css";
+import "../style/registro.css";
 
 export default function RegistroView() {
   return (

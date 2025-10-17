@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Registro.css';
+import '../style/registro.css';
 
 function Registro() {
   return (

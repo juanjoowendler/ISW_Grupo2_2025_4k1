@@ -14,7 +14,9 @@ from .models import Actividad, Inscripcion
 def get_actividades(request):
     tipo = request.GET.get("tipo")
     disponible = request.GET.get("disponible")
-
+    hora = request.GET.get("hora")
+    dia = request.GET.get("dia")
+    
     actividades = Actividad.objects.all()
 
     # Filtrar por tipo si se envía
@@ -25,6 +27,25 @@ def get_actividades(request):
     if disponible is not None:
         disponible = disponible.lower() == "true"
         actividades = [a for a in actividades if a.esta_disponible() == disponible]
+    
+    # Filtrar por hora si se envía
+    if hora:
+        actividades = [a for a in actividades if a.hora.strftime("%H:%M") >= hora]
+    
+    # Filtra por día si se envia
+    if dia:
+        # Si 'actividades' es un QuerySet usamos .filter, si ya es una lista (por filtros anteriores) usamos una comprensión.
+        if hasattr(actividades, "filter"):
+            actividades = actividades.filter(fecha=dia)
+        else:
+            # Soportar tanto formatos 'YYYY-MM-DD' como 'DD-MM-YYYY' en el parámetro dia
+            actividades = [
+                a for a in actividades
+                if a.fecha.strftime("%Y-%m-%d") == dia or a.fecha.strftime("%d-%m-%Y") == dia
+            ]
+            
+    if not actividades:
+        return JsonResponse({"mensaje": "No se encontraron actividades."}, status=404)
 
     data = [
         {

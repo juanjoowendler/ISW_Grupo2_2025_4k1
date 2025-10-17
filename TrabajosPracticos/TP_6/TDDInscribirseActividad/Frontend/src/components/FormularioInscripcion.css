@@ -1,0 +1,88 @@
+.inscripcion-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #c8e6c9, #e8f5e9);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.inscripcion-form {
+  background-color: white;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.inscripcion-form h2 {
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.inscripcion-form label {
+  font-weight: 600;
+  display: block;
+  margin-top: 1rem;
+}
+
+.inscripcion-form select,
+.inscripcion-form input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.3rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.inscripcion-form input:focus,
+.inscripcion-form select:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.persona-fields {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9fbe7;
+}
+
+.persona-fields h4 {
+  margin-bottom: 0.8rem;
+  color: #558b2f;
+}
+
+.checkbox-container {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.inscripcion-form button {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.inscripcion-form button:hover {
+  background-color: #388e3c;
+}

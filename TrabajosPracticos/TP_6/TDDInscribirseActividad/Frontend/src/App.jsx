@@ -1,16 +1,17 @@
-import Login from './components/Login';
-import Registro from './components/Registro';
-import FormularioInscripcion from './components/FormularioInscripcion';
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginView from "./views/LoginView";
+import RegistroView from "./views/RegistroView";
+import InscripcionView from "./views/InscripcionView";
 
-function App() {
+export default function App() {
   return (
-    <div>
-      <h1>Bienvenido al Parque</h1>
-      <Login />
-      <Registro />
-      <FormularioInscripcion />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginView />} />
+        <Route path="/registro" element={<RegistroView />} />
+        <Route path="/inscripcion" element={<InscripcionView />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;

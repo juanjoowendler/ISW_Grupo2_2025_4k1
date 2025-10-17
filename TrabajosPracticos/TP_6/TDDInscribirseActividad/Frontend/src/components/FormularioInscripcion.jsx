@@ -118,7 +118,16 @@ export default function FormularioInscripcion() {
               {requiereTalla(tipoActividad) && (
                 <>
                   <label>Talla de vestimenta:</label><br />
-                  <input type="text" value={p.talla} onChange={(e) => handlePersonaChange(i, 'talla', e.target.value)} required /><br />
+                  <select value={p.talla} onChange={(e) => handlePersonaChange(i, 'talla', e.target.value)} required>
+                    <option value="">-- Seleccionar --</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                    </select>
+
                 </>
               )}
             </div>

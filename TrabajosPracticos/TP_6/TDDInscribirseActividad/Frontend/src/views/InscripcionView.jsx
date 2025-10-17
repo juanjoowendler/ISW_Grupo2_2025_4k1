@@ -1,6 +1,6 @@
 // src/views/InscripcionView.jsx
 import FormularioInscripcion from "../components/FormularioInscripcion";
-import "../style/FormularioInscripcion.css";
+import "../styles/FormularioInscripcion.css";
 
 export default function InscripcionView() {
   return (

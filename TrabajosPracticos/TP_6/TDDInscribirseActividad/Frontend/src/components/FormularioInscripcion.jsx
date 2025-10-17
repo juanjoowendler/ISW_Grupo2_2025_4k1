@@ -11,6 +11,13 @@ export default function FormularioInscripcion() {
   const [personas, setPersonas] = useState([]);
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [errores, setErrores] = useState({});
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [toast, setToast] = useState({ visible: false, mensaje: "", tipo: "" });
+
+const mostrarToast = (mensaje, tipo = "info") => {
+  setToast({ visible: true, mensaje, tipo });
+  setTimeout(() => setToast({ visible: false, mensaje: "", tipo: "" }), 3000);
+};
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/actividades")
@@ -20,9 +27,7 @@ export default function FormularioInscripcion() {
         setActividades(actividadesFiltradas);
         setPersonas([{ nombre: "", dni: "", edad: "", talla: "" }]);
       })
-      .catch((err) => {
-        console.error("Error al obtener actividades:", err);
-      });
+      .catch((err) => console.error("Error al obtener actividades:", err));
   }, []);
 
   const tiposUnicos = [...new Set(actividades.map((a) => a.tipo))];
@@ -58,67 +63,33 @@ export default function FormularioInscripcion() {
     if (campo === "talla" && requiereTalla(tipoActividad) && !valor)
       error = "Selecciona una talla.";
 
-    if (error) {
-      nuevosErrores[`${i}-${campo}`] = error;
-    } else {
-      delete nuevosErrores[`${i}-${campo}`];
-    }
+    if (error) nuevosErrores[`${i}-${campo}`] = error;
+    else delete nuevosErrores[`${i}-${campo}`];
     setErrores(nuevosErrores);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!tipoActividad) {
-      alert("No selecciono el tipo de actividad a realizar");
-      return;
-    }
 
-    if (!horario) {
-        alert("No a seleccionado un horario");
-        return;
-      }
+    if (!tipoActividad) return mostrarToast("No seleccionó el tipo de actividad a realizar");
+    if (!horario) return mostrarToast("No seleccionó un horario");
 
     for (let i = 0; i < personas.length; i++) {
-  const p = personas[i];
-
-  if (!p.nombre) {
-    alert(`Falta ingresar el nombre en el formulario de la persona ${i + 1}`);
-    return;
-  }
-
-  if (!p.dni) {
-    alert(`Falta ingresar el DNI en el formulario de la persona ${i + 1}`);
-    return;
-  }
-
-  if (!p.edad) {
-    alert(`Falta ingresar la edad en el formulario de la persona ${i + 1}`);
-    return;
-  }
-
-  if (requiereTalla(tipoActividad) && !p.talla) {
-    alert(`Falta seleccionar la talla en el formulario de la persona ${i + 1}`);
-    return;
-  }
-}
-    if (!aceptaTerminos) {
-      alert("Debes aceptar los términos y condiciones");
-      return;
+      const p = personas[i];
+      if (!p.nombre) return mostrarToast(`Falta el nombre en la persona ${i + 1}`);
+      if (!p.dni) return mostrarToast(`Falta el DNI en la persona ${i + 1}`);
+      if (!p.edad) return mostrarToast(`Falta la edad en la persona ${i + 1}`);
+      if (requiereTalla(tipoActividad) && !p.talla)
+        return mostrarToast(`Falta seleccionar la talla en la persona ${i + 1}`);
     }
 
-    if (Object.keys(errores).length > 0) {
-      alert("Por favor corrige los errores antes de enviar.");
-      return;
-    }
+    if (!aceptaTerminos) return mostrarToast("Debes aceptar los términos y condiciones");
+    if (Object.keys(errores).length > 0)
+      return mostrarToast("Por favor corrige los errores antes de enviar.");
 
-    alert("Inscripción enviada correctamente");
-    console.log({
-      tipoActividad,
-      horario,
-      cantidad,
-      personas,
-    });
-    window.location.href = "/"
+    mostrarToast("Inscripción enviada correctamente");
+    console.log({ tipoActividad, horario, cantidad, personas });
+    window.location.href = "/";
   };
 
   return (
@@ -126,7 +97,7 @@ export default function FormularioInscripcion() {
       <form onSubmit={handleSubmit} noValidate>
         <h2>Formulario de Inscripción</h2>
 
-        {/* Actividades */}
+        {/* Actividad */}
         <label>Actividad:</label>
         <select
           value={tipoActividad}
@@ -144,7 +115,7 @@ export default function FormularioInscripcion() {
           ))}
         </select>
 
-        {/* Horarios */}
+        {/* Horario */}
         {tipoActividad && (
           <>
             <label>Horario:</label>
@@ -161,15 +132,9 @@ export default function FormularioInscripcion() {
 
         {/* Cantidad */}
         <label>Cantidad de personas:</label>
-        <input
-          type="number"
-          value={cantidad}
-          min="1"
-          onChange={handleCantidadChange}
-          required
-        />
+        <input type="number" value={cantidad} min="1" onChange={handleCantidadChange} required />
 
-        {/* Personas */}
+        {/* Datos de las personas */}
         {personas.length > 0 && (
           <>
             <h3>Datos de las personas:</h3>
@@ -228,21 +193,78 @@ export default function FormularioInscripcion() {
           </>
         )}
 
-        {/* Términos */}
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            checked={aceptaTerminos}
-            onChange={(e) => setAceptaTerminos(e.target.checked)}
-          />
-          Acepto los términos y condiciones
-        </label>
-        <p className="nota">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non justo a magna fermentum dictum.
-        </p>
+        {/* Términos y condiciones */}
+        <div className="terminos-container">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={aceptaTerminos}
+              onChange={(e) => setAceptaTerminos(e.target.checked)}
+            />
+            Acepto los {" "}
+            <span className="link-terminos"  onClick={(e) => {e.stopPropagation();
+            setMostrarModal(true);
+            }}
+>
+              términos y condiciones
+            </span>
+          </label>
+        </div>
 
         <button type="submit">Enviar inscripción</button>
       </form>
+
+      {/* Modal */}
+      {mostrarModal && (
+        <div className="modal-overlay" onClick={() => setMostrarModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Términos y Condiciones de Participación</h3>
+              <button className="cerrar-modal" onClick={() => setMostrarModal(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="modal-texto">
+              <p><strong>Última actualización:</strong> 14/10/2025</p>
+              <p>
+                Al inscribirse y participar en las actividades ofrecidas por EcoHarmony Park,
+                usted acepta cumplir los siguientes términos:
+              </p>
+              <ul>
+                <li>La inscripción es exclusiva mediante la aplicación de EcoHarmony Park.</li>
+                <li>Debe completar todos los datos requeridos de forma veraz y completa.</li>
+                <li>El uso de equipo de seguridad es obligatorio en actividades como Tirolesa y Palestra.</li>
+                <li>El participante debe seguir las instrucciones del personal en todo momento.</li>
+                <li>EcoHarmony Park puede modificar o cancelar actividades por razones operativas o climáticas.</li>
+                <li>El participante asume los riesgos inherentes y exime al parque de responsabilidad, salvo negligencia grave.</li>
+                <li>Los datos personales se utilizan exclusivamente para la gestión de la inscripción y seguridad.</li>
+              </ul>
+              <p>
+                Al hacer clic en “Aceptar”, confirmas que has leído, comprendido y aceptado estos
+                términos y condiciones.
+              </p>
+            </div>
+            <div className="modal-botones">
+              <button className="btn-secundario" onClick={() => setMostrarModal(false)}>
+                Cancelar
+              </button>
+              <button
+                className="btn-principal"
+                onClick={() => {
+                  setAceptaTerminos(true);
+                  setMostrarModal(false);
+                }}
+              >
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {toast.visible && (<div className={`toast ${toast.tipo}`}>
+        {toast.mensaje}
+        </div>
+      )}
     </div>
   );
 }

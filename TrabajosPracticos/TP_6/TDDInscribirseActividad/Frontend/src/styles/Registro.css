@@ -1,4 +1,4 @@
-/* === Estilos modernos con tonos verdes === */
+/*  Estilos  con tonos verdes  */
 .registro-container {
   height: 100vh;
   width: 100vw;
@@ -9,7 +9,7 @@
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === Tarjeta del formulario === */
+/*  Tarjeta del formulario */
 .registro-form {
   background-color: #ffffff;
   padding: 2.8rem 3.2rem;
@@ -25,7 +25,7 @@
   box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.18);
 }
 
-/* === Título === */
+/*  Título  */
 .registro-form h2 {
   margin-bottom: 1.8rem;
   color: #2e7d32;
@@ -34,7 +34,7 @@
   letter-spacing: 0.5px;
 }
 
-/* === Campos de entrada === */
+/*  Campos de entrada  */
 .registro-form input {
   width: 100%;
   padding: 0.9rem;
@@ -53,7 +53,7 @@
   background-color: #ffffff;
 }
 
-/* === Botón === */
+/*  Botón  */
 .registro-form button {
   width: 100%;
   padding: 1rem;
@@ -73,7 +73,7 @@
   box-shadow: 0px 6px 15px rgba(67, 160, 71, 0.3);
 }
 
-/* === Texto inferior === */
+/*  Texto inferior  */
 .registro-form p {
   text-align: center;
   margin-top: 1.5rem;
@@ -93,7 +93,7 @@
   text-decoration: underline;
 }
 
-/* === Mensaje de registro exitoso === */
+/*  Mensaje de registro exitoso  */
 .mensaje-exito {
   background-color: #ffffff;
   padding: 3rem 3.5rem;
@@ -136,7 +136,7 @@
   box-shadow: 0px 6px 15px rgba(67, 160, 71, 0.3);
 }
 
-/* === Animación de entrada === */
+/*  Animación de entrada  */
 @keyframes aparecer {
   from {
     opacity: 0;

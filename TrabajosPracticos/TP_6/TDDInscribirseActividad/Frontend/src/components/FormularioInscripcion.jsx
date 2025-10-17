@@ -13,27 +13,39 @@ export default function FormularioInscripcion() {
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
   const [toast, setToast] = useState({ visible: false, mensaje: "", tipo: "" });
+  const [fecha, setFecha] = useState('');
+  const [fechasDisponibles, setFechasDisponibles] = useState([]);
 
-const mostrarToast = (mensaje, tipo = "info") => {
-  setToast({ visible: true, mensaje, tipo });
-  setTimeout(() => setToast({ visible: false, mensaje: "", tipo: "" }), 3000);
-};
+  const mostrarToast = (mensaje, tipo = "info") => {
+    setToast({ visible: true, mensaje, tipo });
+    setTimeout(() => setToast({ visible: false, mensaje: "", tipo: "" }), 3000);
+  };
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/actividades")
       .then((res) => res.json())
       .then((data) => {
-        const actividadesFiltradas = data.filter((a) => a.cupo_disponible > 0);
+        const actividadesFiltradas = data.filter((a) => a.cupo_disponible >= 0);
         setActividades(actividadesFiltradas);
         setPersonas([{ nombre: "", dni: "", edad: "", talla: "" }]);
+        const fechas = [...new Set(actividadesFiltradas.map(a => a.fecha))];
+        setFechasDisponibles(fechas);
       })
       .catch((err) => console.error("Error al obtener actividades:", err));
   }, []);
 
-  const tiposUnicos = [...new Set(actividades.map((a) => a.tipo))];
-  const horariosDisponibles = actividades
-    .filter((a) => a.tipo === tipoActividad && a.cupo_disponible > 0)
-    .map((a) => a.hora);
+
+  const actividadesPorFecha = actividades.filter(a => a.fecha === fecha);
+  const tiposUnicos = [...new Set(actividadesPorFecha.map(a => a.tipo))];
+  const horariosDisponibles = actividadesPorFecha
+    .filter((a) => a.tipo === tipoActividad)
+    .map((a) => ({
+      hora: a.hora,
+      cupo: a.cupo_disponible,
+    }))
+    .filter((h) => h.cupo !== undefined); // ← solo los que tienen dato de cupo
+
+
 
   const handleCantidadChange = (e) => {
     const n = parseInt(e.target.value) || 0;
@@ -88,47 +100,140 @@ const mostrarToast = (mensaje, tipo = "info") => {
       return mostrarToast("Por favor corrige los errores antes de enviar.");
 
     mostrarToast("Inscripción enviada correctamente");
-    console.log({ tipoActividad, horario, cantidad, personas });
-    window.location.href = "/";
+    console.log({ tipoActividad, horario, cantidad, personas, fecha });
+
+    // 🔸 Enviar al backend por POST
+    fetch("http://127.0.0.1:8000/api/inscribirse_actividad", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        actividad: tipoActividad,
+        fecha,
+        horario,
+        cantidad,
+        personas
+      })
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Error en el servidor");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Respuesta del servidor:", data);
+        mostrarToast("Inscripción guardada correctamente", "success");
+        // 🔹 Podés limpiar el formulario acá si querés
+      })
+      .catch((err) => {
+        console.error("Error al enviar inscripción:", err);
+        mostrarToast("Ocurrió un error al enviar la inscripción", "error");
+      });
+
+
   };
 
   return (
     <div className="formulario-container">
       <form onSubmit={handleSubmit} noValidate>
         <h2>Formulario de Inscripción</h2>
+        {/* Fecha */}
+        <label>Fecha:</label>
+        <select value={fecha} onChange={(e) => {
+          setFecha(e.target.value);
+          setTipoActividad("");
+          setHorario("");
+          setCantidad(1);
+          setPersonas([{ nombre: "", dni: "", edad: "", talla: "" }]);
+          setErrores({});
+          setAceptaTerminos(false);
+        }}>
 
-        {/* Actividad */}
-        <label>Actividad:</label>
-        <select
-          value={tipoActividad}
-          onChange={(e) => {
-            setTipoActividad(e.target.value);
-            setHorario("");
-          }}
-          required
-        >
-          <option value="">-- Seleccionar --</option>
-          {tiposUnicos.map((tipo) => (
-            <option key={tipo} value={tipo}>
-              {tipo}
-            </option>
+          <option value="">-- Seleccionar fecha --</option>
+          {fechasDisponibles.map((f) => (
+            <option key={f} value={f}>{f}</option>
           ))}
         </select>
 
-        {/* Horario */}
+
+        {/* Actividad */}
+        <label>Seleccioná una actividad:</label>
+        <div className="botones-container">
+          {actividades.length === 0 ? (
+            <p style={{ fontStyle: "italic", color: "#888" }}>Cargando actividades...</p>
+          ) : (
+            [...new Set(actividades.map(a => a.tipo))].map((tipo) => {
+              const actividadesDelTipo = actividades.filter(a => a.tipo === tipo);
+              const tieneCupoEnHorario = !horario || actividadesDelTipo.some(a => a.hora === horario && a.cupo_disponible > 0);
+              const estaSeleccionado = tipo === tipoActividad;
+              const otraSeleccionada = tipoActividad && tipo !== tipoActividad;
+
+              const clases = [
+                "boton-toggle",
+                estaSeleccionado ? "activo" : "",
+                !tieneCupoEnHorario ? "inactivo" : "",
+                otraSeleccionada ? "inactivo" : ""
+              ].join(" ").trim();
+
+              return (
+                <button
+                  key={tipo}
+                  type="button"
+                  className={clases}
+                  onClick={() => {
+                    if (tieneCupoEnHorario) setTipoActividad(tipo);
+                  }}
+                  disabled={!tieneCupoEnHorario}
+                >
+                  {tipo}
+                </button>
+              );
+            })
+          )}
+        </div>
+
+        {/* Mostrar actividad seleccionada */}
         {tipoActividad && (
-          <>
-            <label>Horario:</label>
-            <select value={horario} onChange={(e) => setHorario(e.target.value)} required>
-              <option value="">-- Seleccionar --</option>
+          <div className="actividad-seleccionada">
+            Actividad seleccionada: <b>{tipoActividad}</b>
+          </div>
+        )}
+
+
+        {/* Horario */}
+        <label>Horario:</label>
+        <select
+          value={horario}
+          onChange={(e) => setHorario(e.target.value)}
+          disabled={!tipoActividad} // 🔸 Se desactiva si no hay actividad
+          required
+        >
+          {!tipoActividad ? (
+            <option value="">-- Seleccioná una actividad --</option> // 🔹 Mensaje cuando no hay actividad
+          ) : horariosDisponibles.length > 0 ? (
+            <>
+              <option value="">-- Seleccionar horario --</option>
               {horariosDisponibles.map((h, i) => (
-                <option key={i} value={h}>
-                  {h}
+                <option
+                  key={i}
+                  value={h.hora}
+                  disabled={h.cupo <= 0}
+                  style={{
+                    color: h.cupo <= 0 ? "gray" : "black",
+                    textDecoration: h.cupo <= 0 ? "line-through" : "none"
+                  }}
+                >
+                  {h.hora} {h.cupo <= 0 ? "(sin cupo)" : ""}
                 </option>
               ))}
-            </select>
-          </>
-        )}
+            </>
+          ) : (
+            <option disabled value="">
+              No hay horarios disponibles
+            </option>
+          )}
+        </select>
+
 
         {/* Cantidad */}
         <label>Cantidad de personas:</label>
@@ -202,10 +307,11 @@ const mostrarToast = (mensaje, tipo = "info") => {
               onChange={(e) => setAceptaTerminos(e.target.checked)}
             />
             Acepto los {" "}
-            <span className="link-terminos"  onClick={(e) => {e.stopPropagation();
-            setMostrarModal(true);
+            <span className="link-terminos" onClick={(e) => {
+              e.stopPropagation();
+              setMostrarModal(true);
             }}
->
+            >
               términos y condiciones
             </span>
           </label>
@@ -263,7 +369,7 @@ const mostrarToast = (mensaje, tipo = "info") => {
       )}
       {toast.visible && (<div className={`toast ${toast.tipo}`}>
         {toast.mensaje}
-        </div>
+      </div>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/FormularioInscripcion.css";
 
 const requiereTalla = (tipo) => tipo === "Tirolesa" || tipo === "Palestra";
@@ -48,11 +49,26 @@ export default function FormularioInscripcion() {
 
 
   const handleCantidadChange = (e) => {
-    const n = parseInt(e.target.value) || 0;
+    let n = parseInt(e.target.value) || 0;
+
+    // 🔸 Buscar el cupo disponible de la actividad seleccionada
+    const actividad = actividades.find(
+      (a) => a.tipo === tipoActividad && a.hora === horario && a.fecha === fecha
+    );
+
+    const cupoDisponible = actividad ? actividad.cupo_disponible : 0;
+
+    if (n > cupoDisponible) {
+      mostrarToast(`Solo hay ${cupoDisponible} cupos disponibles`, "error");
+      n = cupoDisponible;
+    }
+
     setCantidad(n);
     setPersonas(
       Array.from({ length: n }, (_, i) => personas[i] || { nombre: "", dni: "", edad: "", talla: "" })
     );
+
+
   };
 
   const handlePersonaChange = (i, campo, valor) => {
@@ -79,59 +95,76 @@ export default function FormularioInscripcion() {
     else delete nuevosErrores[`${i}-${campo}`];
     setErrores(nuevosErrores);
   };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!tipoActividad) return mostrarToast("No seleccionó el tipo de actividad a realizar");
-    if (!horario) return mostrarToast("No seleccionó un horario");
-
     for (let i = 0; i < personas.length; i++) {
       const p = personas[i];
-      if (!p.nombre) return mostrarToast(`Falta el nombre en la persona ${i + 1}`);
-      if (!p.dni) return mostrarToast(`Falta el DNI en la persona ${i + 1}`);
-      if (!p.edad) return mostrarToast(`Falta la edad en la persona ${i + 1}`);
+      if (!p.nombre) return mostrarToast(`Falta el nombre en la persona ${i + 1}`, "error");
+      if (!p.dni) return mostrarToast(`Falta el DNI en la persona ${i + 1}`, "error");
+      if (!p.edad) return mostrarToast(`Falta la edad en la persona ${i + 1}`, "error");
       if (requiereTalla(tipoActividad) && !p.talla)
-        return mostrarToast(`Falta seleccionar la talla en la persona ${i + 1}`);
+        return mostrarToast(`Falta seleccionar la talla en la persona ${i + 1}, "error"`);
     }
-
     if (!aceptaTerminos) return mostrarToast("Debes aceptar los términos y condiciones");
     if (Object.keys(errores).length > 0)
-      return mostrarToast("Por favor corrige los errores antes de enviar.");
+      return mostrarToast("Por favor corrige los errores antes de enviar.", "error");
 
-    mostrarToast("Inscripción enviada correctamente");
-    console.log({ tipoActividad, horario, cantidad, personas, fecha });
+    const actividadSeleccionada = actividades.find(
+      (a) => a.tipo === tipoActividad && a.hora === horario && a.fecha === fecha
+    );
 
-    // 🔸 Enviar al backend por POST
+    if (!actividadSeleccionada) {
+      return mostrarToast("No se encontró la actividad con esa fecha y horario", "error");
+    }
+
+
+    const payload = {
+      id_actividad: actividadSeleccionada.id_actividad,
+      terminosYcondiciones: aceptaTerminos,
+      cant_personas: cantidad,
+      personas: personas.map((p) => ({
+        dni: parseInt(p.dni),
+        nombre: p.nombre,
+        edad: parseInt(p.edad),
+        talle: requiereTalla(tipoActividad) ? p.talla : null,
+      })),
+    };
+
+
+
     fetch("http://127.0.0.1:8000/api/inscribirse_actividad", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        actividad: tipoActividad,
-        fecha,
-        horario,
-        cantidad,
-        personas
-      })
+      body: JSON.stringify(payload),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error en el servidor");
+        if (!res.ok) throw new Error("Error en el envío");
         return res.json();
       })
       .then((data) => {
+        mostrarToast("Inscripción enviada correctamente", "success");
         console.log("Respuesta del servidor:", data);
-        mostrarToast("Inscripción guardada correctamente", "success");
-        // 🔹 Podés limpiar el formulario acá si querés
+
+        navigate("/post-inscripcion", {
+          state: {
+            fecha,
+            horario,
+            tipo: tipoActividad,
+            cantidad,
+          }
+        });
       })
       .catch((err) => {
         console.error("Error al enviar inscripción:", err);
-        mostrarToast("Ocurrió un error al enviar la inscripción", "error");
+        mostrarToast("Hubo un error al enviar la inscripción", "error");
       });
-
-
   };
+
 
   return (
     <div className="formulario-container">
@@ -205,11 +238,11 @@ export default function FormularioInscripcion() {
         <select
           value={horario}
           onChange={(e) => setHorario(e.target.value)}
-          disabled={!tipoActividad} // 🔸 Se desactiva si no hay actividad
+          disabled={!tipoActividad} 
           required
         >
           {!tipoActividad ? (
-            <option value="">-- Seleccioná una actividad --</option> // 🔹 Mensaje cuando no hay actividad
+            <option value="">-- Seleccioná una actividad --</option> 
           ) : horariosDisponibles.length > 0 ? (
             <>
               <option value="">-- Seleccionar horario --</option>

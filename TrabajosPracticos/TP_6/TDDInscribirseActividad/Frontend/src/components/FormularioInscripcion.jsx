@@ -22,14 +22,23 @@ export default function FormularioInscripcion() {
     setTimeout(() => setToast({ visible: false, mensaje: "", tipo: "" }), 3000);
   };
 
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/actividades")
       .then((res) => res.json())
       .then((data) => {
-        const actividadesFiltradas = data.filter((a) => a.cupo_disponible >= 0);
-        setActividades(actividadesFiltradas);
+        const ahora = new Date();
+
+
+        const actividadesFuturas = data.filter((a) => {
+          const fechaHoraActividad = new Date(`${a.fecha}T${a.hora}`);
+          return fechaHoraActividad > ahora && a.cupo_disponible >= 0;
+        });
+
+        setActividades(actividadesFuturas);
         setPersonas([{ nombre: "", dni: "", edad: "", talla: "" }]);
-        const fechas = [...new Set(actividadesFiltradas.map(a => a.fecha))];
+
+        const fechas = [...new Set(actividadesFuturas.map((a) => a.fecha))];
         setFechasDisponibles(fechas);
       })
       .catch((err) => console.error("Error al obtener actividades:", err));
@@ -38,14 +47,18 @@ export default function FormularioInscripcion() {
 
   const actividadesPorFecha = actividades.filter(a => a.fecha === fecha);
   const tiposUnicos = [...new Set(actividadesPorFecha.map(a => a.tipo))];
+
+  const ahora = new Date();
   const horariosDisponibles = actividadesPorFecha
     .filter((a) => a.tipo === tipoActividad)
+    .filter((a) => {
+      const fechaHoraActividad = new Date(`${a.fecha}T${a.hora}`);
+      return fechaHoraActividad > ahora;
+    })
     .map((a) => ({
       hora: a.hora,
       cupo: a.cupo_disponible,
-    }))
-    .filter((h) => h.cupo !== undefined); // ← solo los que tienen dato de cupo
-
+    }));
 
 
   const handleCantidadChange = (e) => {
@@ -161,6 +174,7 @@ export default function FormularioInscripcion() {
       })
       .catch((err) => {
         console.error("Error al enviar inscripción:", err);
+        console.error(res.json())
         mostrarToast("Hubo un error al enviar la inscripción", "error");
       });
   };
@@ -238,11 +252,11 @@ export default function FormularioInscripcion() {
         <select
           value={horario}
           onChange={(e) => setHorario(e.target.value)}
-          disabled={!tipoActividad} 
+          disabled={!tipoActividad}
           required
         >
           {!tipoActividad ? (
-            <option value="">-- Seleccioná una actividad --</option> 
+            <option value="">-- Seleccioná una actividad --</option>
           ) : horariosDisponibles.length > 0 ? (
             <>
               <option value="">-- Seleccionar horario --</option>

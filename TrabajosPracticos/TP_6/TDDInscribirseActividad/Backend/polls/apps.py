@@ -59,14 +59,18 @@ class PollsConfig(AppConfig):
     def ready(self):
         # Crear actividades al iniciar la app (si es necesario).
         # Se rodea en try/except para no romper migraciones o cuando la BD aún no está lista.
-        if False: 
-            return # Desactivar la creación automática de actividades al iniciar la app
-        try:
-            Actividad = self.get_model('Actividad')
-            today = timezone.now().date()
-            for i in range(120):
-                self.crear_actividades(today + datetime.timedelta(days=i), Actividad)
+        # if False: 
+        #     return # Desactivar la creación automática de actividades al iniciar la app
+        # try:
+        #     Actividad = self.get_model('Actividad')
+        #     today = timezone.now().date()
+        #     for i in range(120):
+        #         self.crear_actividades(today + datetime.timedelta(days=i), Actividad)
             
-        except (OperationalError, ProgrammingError):
-            # DB no lista (ej. durante migrate) — no hacer nada
-            pass
+        # except (OperationalError, ProgrammingError):
+        #     # DB no lista (ej. durante migrate) — no hacer nada
+        #     pass --> Todo esto esta movido al signals.py !!
+        import polls.signals
+        print("[polls] App inicializada...")
+        return
+

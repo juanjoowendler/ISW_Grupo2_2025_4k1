@@ -77,6 +77,9 @@ def get_actividades(request):
 
 @csrf_exempt
 def post_inscripcion(request):
+    # Listado de talles_validos.
+    talles_validos = ["XS", "S", "M", "L", "XL", "XXL"]
+    
     if request.method != 'POST':
         return JsonResponse({"error": "Método no permitido"}, status=405)
 
@@ -103,27 +106,41 @@ def post_inscripcion(request):
         cant = int(data.get("cant_personas", 0))
         if actividad.cupo_disponible < cant or cant <= 0:
             return JsonResponse({"error": "No hay cupos disponibles"}, status=400)
-
-        # Validar talle si la actividad lo requiere
-        if actividad.tipo.lower() in ["tirolesa", "palestra"] and not data.get("talle"):
-            return JsonResponse({"error": "Debe ingresar el talle de vestimenta"}, status=400)
         
-        # Validar que el talle sea uno válido si se proporciona
-        talles_validos = ["XS", "S", "M", "L", "XL", "XXL"]
-        if actividad.tipo.lower() in ["tirolesa", "palestra"] and data.get("talle") and data.get("talle") not in talles_validos:
-            return JsonResponse({"error": "El talle proporcionado no es válido"}, status=400)
-
         # Crear inscripción
         inscripcion = Inscripcion.objects.create(
             id_actividad=id_actividad,
-            edad=data.get("edad"),
             cant_personas=cant
         )
-        for _ in cant:
-            persona = Persona.objects.create(
-            dni=data.get("DNI"),
-            nombre=data.get("nombre"),
-            talle=data.get("talle"))
+            
+        personas = data.get("personas", [])
+        
+        for persona_data in personas:
+            dni=persona_data.get("dni")
+            nombre=persona_data.get("nombre")
+            edad = persona_data.get("edad")
+            talle=persona_data.get("talle")
+
+            # Validar campos mínimos
+            if not dni or not nombre or not edad:
+                return JsonResponse({"error": f"Faltan datos para una una persona ({persona_data})"}, status=400)
+
+            # Validar el talle si ess que corresponde en base a la actividad.
+            if actividad.tipo.lower() in ["tirolesa", "palestra"]:
+                if not talle:
+                    return JsonResponse({"error": f"Debe ingresar el talle para: {nombre}"}, status=400)
+                if talle not in talles_validos:
+                    return JsonResponse({"error": f"El talle '{talle}' no es válido"}, status=400)
+            
+            persona, _ = Persona.objects.get_or_create(
+                dni=dni,
+                defaults={"nombre": nombre, "edad": edad, "talle": talle}
+            )
+
+            InscripcionPorPersona.objects.create(
+                persona=persona,
+                inscripcion=inscripcion
+            )
 
         # Actualizar cupo
         actividad.cupo_disponible -= cant

@@ -7,9 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Inscripcion(models.Model):
     id = models.AutoField(primary_key=True)
     id_actividad = models.IntegerField()
-    nombre = models.CharField(max_length=100)
     cant_personas = models.IntegerField()
-    talle = models.CharField(max_length=10, blank=True, null=True)
     
 class Actividad(models.Model):
     id = models.AutoField(primary_key=True)

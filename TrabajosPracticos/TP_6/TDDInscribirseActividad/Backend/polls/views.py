@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from .models import Actividad, Inscripcion
+from .models import Actividad, Inscripcion, Persona, InscripcionPorPersona
 
 
 # Create your views here.
@@ -116,12 +116,14 @@ def post_inscripcion(request):
         # Crear inscripción
         inscripcion = Inscripcion.objects.create(
             id_actividad=id_actividad,
-            nombre=data.get("nombre"),
-            dni=data.get("DNI"),
             edad=data.get("edad"),
-            cant_personas=cant,
-            talle=data.get("talle")
+            cant_personas=cant
         )
+        for _ in cant:
+            persona = Persona.objects.create(
+            dni=data.get("DNI"),
+            nombre=data.get("nombre"),
+            talle=data.get("talle"))
 
         # Actualizar cupo
         actividad.cupo_disponible -= cant

@@ -215,7 +215,7 @@ export default function FormularioInscripcion() {
       if (requiereTalla(tipoActividad) && !p.talla)
         return mostrarToast(`Falta seleccionar la talla en la persona ${i + 1}, "error"`);
     }
-    if (!aceptaTerminos) return mostrarToast("Debes aceptar los términos y condiciones");
+    if (!aceptaTerminos) return mostrarToast("Debes aceptar los términos y condiciones", "error");
     if (Object.keys(errores).length > 0)
       return mostrarToast("Por favor corrige los errores antes de enviar.", "error");
 

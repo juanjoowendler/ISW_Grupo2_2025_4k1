@@ -374,7 +374,12 @@ form button[type="submit"]:hover {
 /* 10. Toasts (Notificaciones) */
 /* ========================================= */
 .toast {
-    /* ... (posición y animación se mantienen) ... */
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+
     background-color: #ffffff;
     padding: 1rem 1.7rem;
     border-radius: 12px;
@@ -383,11 +388,13 @@ form button[type="submit"]:hover {
     display: flex;
     align-items: center;
     gap: 0.8rem;
+
+    animation: fadeIn 0.3s ease-out;
 }
 
 /* Iconos para los toasts */
 .toast::before {
-    content: "✅"; 
+    content: "❌"; 
     font-size: 1.2rem;
 }
 

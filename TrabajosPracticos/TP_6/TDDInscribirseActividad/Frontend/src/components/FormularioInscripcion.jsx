@@ -465,6 +465,8 @@ export default function FormularioInscripcion() {
                   <li>EcoHarmony Park puede modificar o cancelar actividades por razones operativas o climáticas.</li>
                   <li>El participante asume los riesgos inherentes y exime al parque de responsabilidad, salvo negligencia grave.</li>
                   <li>Los datos personales se utilizan exclusivamente para la gestión de la inscripción y seguridad.</li>
+                  <li>Todo participante menor de edad deberá ir acompañado de un adulto responsable. La organización
+                    no se hace responsable de verificar si el menor es acompañado o no.</li>
                 </ul>
                 <p>
                   Al hacer clic en “Aceptar”, confirmas que has leído, comprendido y aceptado estos

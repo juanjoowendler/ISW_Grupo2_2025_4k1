@@ -4,6 +4,83 @@ import "../styles/FormularioInscripcion.css";
 import Navbar from "./Navbar";
 const requiereTalla = (tipo) => tipo === "Tirolesa" || tipo === "Palestra";
 
+
+
+const DatosPersona = ({ index, persona, tipoActividad, handlePersonaChange, errores, estaAbierta, onToggle }) => {
+  const mostrarTalla = requiereTalla(tipoActividad);
+  
+  // Determina si hay errores en esta persona para mostrar una advertencia
+  const tieneErrores = Object.keys(errores).some(key => key.startsWith(`${index}-`));
+
+  return (
+    <div className={`persona-card ${estaAbierta ? 'abierta' : ''} ${tieneErrores ? 'error-card' : ''}`}>
+      {/* Encabezado del Acordeón/Toggle */}
+      <div className="persona-header" onClick={() => onToggle(index)}>
+        <h4>
+          Persona {index + 1}: {persona.nombre || "Participante"} 
+          {tieneErrores && <span className="error-indicator"> (⚠️ Error)</span>}
+        </h4>
+        <span className="toggle-icon">{estaAbierta ? '▲' : '▼'}</span>
+      </div>
+
+      {/* Contenido Desplegable (se muestra solo si estaAbierta es true) */}
+      <div className={`persona-content ${estaAbierta ? 'visible' : 'oculta'}`}>
+        <label>Nombre:</label>
+        <input
+          type="text"
+          value={persona.nombre}
+          onChange={(e) => handlePersonaChange(index, "nombre", e.target.value)}
+          className={errores[`${index}-nombre`] ? "error" : ""}
+          placeholder="Nombre completo"
+        />
+        {errores[`${index}-nombre`] && <span className="mensaje-error">{errores[`${index}-nombre`]}</span>}
+
+        <label>DNI:</label>
+        <input
+          type="number"
+          value={persona.dni}
+          onChange={(e) => handlePersonaChange(index, "dni", e.target.value)}
+          className={errores[`${index}-dni`] ? "error" : ""}
+          placeholder="DNI (7 u 8 números)"
+        />
+        {errores[`${index}-dni`] && <span className="mensaje-error">{errores[`${index}-dni`]}</span>}
+
+        <label>Edad:</label>
+        <input
+          type="number"
+          value={persona.edad}
+          onChange={(e) => handlePersonaChange(index, "edad", e.target.value)}
+          className={errores[`${index}-edad`] ? "error" : ""}
+          placeholder="Edad"
+        />
+        {errores[`${index}-edad`] && <span className="mensaje-error">{errores[`${index}-edad`]}</span>}
+
+        {mostrarTalla && (
+          <>
+            <label>Talla (requerida):</label>
+            <select
+              value={persona.talla}
+              onChange={(e) => handlePersonaChange(index, "talla", e.target.value)}
+              className={errores[`${index}-talla`] ? "error" : ""}
+            >
+              <option value="">-- Seleccionar --</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+            {errores[`${index}-talla`] && (
+              <span className="mensaje-error">{errores[`${index}-talla`]}</span>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function FormularioInscripcion() {
   const [actividades, setActividades] = useState([]);
   const [tipoActividad, setTipoActividad] = useState("");
@@ -16,6 +93,7 @@ export default function FormularioInscripcion() {
   const [toast, setToast] = useState({ visible: false, mensaje: "", tipo: "" });
   const [fecha, setFecha] = useState('');
   const [fechasDisponibles, setFechasDisponibles] = useState([]);
+  const [personaAbierta, setPersonaAbierta] = useState(0);
 
   const mostrarToast = (mensaje, tipo = "info") => {
     setToast({ visible: true, mensaje, tipo });
@@ -121,6 +199,11 @@ export default function FormularioInscripcion() {
   };
   const navigate = useNavigate();
 
+  // 🆕 FUNCIÓN NUEVA: Maneja el despliegue del acordeón
+  const handleTogglePersona = (index) => {
+    setPersonaAbierta(personaAbierta === index ? -1 : index);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -196,7 +279,7 @@ export default function FormularioInscripcion() {
       <Navbar />
 
       <div className="formulario-container">
-        <form onSubmit={handleSubmit} noValidate>
+<form className="inscripcion-form" onSubmit={handleSubmit} noValidate>
           <h2>Formulario de Inscripción</h2>
           {/* Fecha */}
           <label>Fecha:</label>
@@ -316,64 +399,25 @@ export default function FormularioInscripcion() {
           <label>Cantidad de personas:</label>
           <input type="number" value={cantidad} min="1" onChange={handleCantidadChange} required />
 
-          {/* Datos de las personas */}
-          {personas.length > 0 && (
-            <>
-              <h3>Datos de las personas:</h3>
-              {personas.map((p, i) => (
-                <div key={i} className="persona-card">
-                  <label>Nombre:</label>
-                  <input
-                    type="text"
-                    value={p.nombre}
-                    onChange={(e) => handlePersonaChange(i, "nombre", e.target.value)}
-                    className={errores[`${i}-nombre`] ? "error" : ""}
-                  />
-                  {errores[`${i}-nombre`] && <span className="mensaje-error">{errores[`${i}-nombre`]}</span>}
-
-                  <label>DNI:</label>
-                  <input
-                    type="number"
-                    value={p.dni}
-                    onChange={(e) => handlePersonaChange(i, "dni", e.target.value)}
-                    className={errores[`${i}-dni`] ? "error" : ""}
-                  />
-                  {errores[`${i}-dni`] && <span className="mensaje-error">{errores[`${i}-dni`]}</span>}
-
-                  <label>Edad:</label>
-                  <input
-                    type="number"
-                    value={p.edad}
-                    onChange={(e) => handlePersonaChange(i, "edad", e.target.value)}
-                    className={errores[`${i}-edad`] ? "error" : ""}
-                  />
-                  {errores[`${i}-edad`] && <span className="mensaje-error">{errores[`${i}-edad`]}</span>}
-
-                  {requiereTalla(tipoActividad) && (
-                    <>
-                      <label>Talla:</label>
-                      <select
-                        value={p.talla}
-                        onChange={(e) => handlePersonaChange(i, "talla", e.target.value)}
-                        className={errores[`${i}-talla`] ? "error" : ""}
-                      >
-                        <option value="">-- Seleccionar --</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                      </select>
-                      {errores[`${i}-talla`] && (
-                        <span className="mensaje-error">{errores[`${i}-talla`]}</span>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </>
-          )}
+         {/* Datos de las personas - RENDERIZADO MODIFICADO CON ACORDEÓN */}
+          {personas.length > 0 && (
+            <>
+              <h3>Datos de las personas:</h3>
+              <p className="nota">Hacé click en cada participante para ver y editar sus datos.</p> {/* Nota para guiar al usuario */}
+              {personas.map((p, i) => (
+                <DatosPersona
+                  key={i}
+                  index={i}
+                  persona={p}
+                  tipoActividad={tipoActividad}
+                  handlePersonaChange={handlePersonaChange}
+                  errores={errores}
+                  estaAbierta={personaAbierta === i} // Pasa si esta persona está abierta
+                  onToggle={handleTogglePersona}      // Pasa la función para abrir/cerrar
+                />
+              ))}
+            </>
+          )}
 
           {/* Términos y condiciones */}
           <div className="terminos-container">
@@ -452,3 +496,4 @@ export default function FormularioInscripcion() {
     </div>
   );
 }
+

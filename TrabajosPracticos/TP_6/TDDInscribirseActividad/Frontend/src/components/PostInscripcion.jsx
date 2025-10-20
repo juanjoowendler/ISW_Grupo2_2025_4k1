@@ -11,6 +11,9 @@ export default function PostInscripcion({ datos }) {
 
   return (
     <div className="postinscripcion-container">
+        <div className="postinscripcion-form">
+
+      
       <h2>¡Inscripción realizada con éxito!</h2>
       <p><strong>Fecha de la visita:</strong> {fecha}</p>
       <p><strong>Horario de la visita:</strong> {horario}</p>
@@ -25,5 +28,7 @@ export default function PostInscripcion({ datos }) {
         Volver a inscripciones
       </button>
     </div>
+        </div>
+
   );
 }

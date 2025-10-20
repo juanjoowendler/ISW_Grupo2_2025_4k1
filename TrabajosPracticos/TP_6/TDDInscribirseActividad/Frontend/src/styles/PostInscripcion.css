@@ -1,13 +1,38 @@
 .postinscripcion-container {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #f0f9ff;
-    border: 1px solid #cce7ff;
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    font-family: 'Arial', sans-serif;
-  }
+    /* Mantiene el fondo y centrado, asegura ocupar toda la vista */
+    background-image: url('../../post.jpg'); 
+    background-size: cover;
+    background-position: center; /* Simplificado */
+    background-repeat: no-repeat; 
+    min-height: 100vh; /* Uso de min-height para manejar contenido largo */
+    width: 100vw; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; 
+    padding: 2rem 1rem; /* Agregado padding vertical y horizontal para móviles */
+    box-sizing: border-box; /* Asegura que padding no afecte el width/height */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Fuente más moderna */
+}
+
+.postinscripcion-form {
+    background: rgba(255, 255, 255, 0.85); /* Un poco menos de transparencia para mejor legibilidad */
+    backdrop-filter: blur(12px); /* Un desenfoque más fuerte */
+    
+    padding: 3rem 2rem; /* Aumento de padding para un look más "premium" */
+    border-radius: 24px; /* Un redondeado más moderno */
+    
+    /* Sombra más profunda y con color sutil del verde */
+    box-shadow: 0 12px 40px rgba(46, 125, 50, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.6); 
+    
+    width: 100%; /* Ocupa el 100% del espacio disponible */
+    max-width: 450px; /* Aumento del ancho máximo para mejor experiencia en escritorio */
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
+    
+    border: 1px solid rgba(255, 255, 255, 0.7); /* Borde más visible */
+}
+
+
   
   .postinscripcion-container h2 {
     color: #0a5fb4;

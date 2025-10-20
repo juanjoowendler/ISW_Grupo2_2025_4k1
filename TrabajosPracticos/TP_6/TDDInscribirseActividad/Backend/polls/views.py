@@ -106,7 +106,7 @@ def post_inscripcion(request):
         
         personas = data.get("personas", [])
 
-        hay_adulto = False; hay_menor = False; edad_minima = 0
+        edad_minima = 0
         for p in personas:
             dni=p.get("dni")
             nombre=p.get("nombre")
@@ -129,13 +129,19 @@ def post_inscripcion(request):
                     return JsonResponse({"error": f"Debe ingresar el talle para: {nombre}"}, status=400)
                 if talle not in ["XS", "S", "M", "L", "XL", "XXL"]:
                     return JsonResponse({"error": f"El talle '{talle}' no es válido"}, status=400)
-                
                 edad_minima = 12 if actividad.tipo.lower() == 'palestra' else 8
-                if edad >= edad_minima: hay_adulto = True
-                else: hay_menor = True
+                
+
+            # Validar edad mínima si corresponde
+            if actividad.tipo.lower() in ["tirolesa", "palestra"] and edad_minima > 0 and edad < edad_minima:
+                return JsonResponse({
+                    "error": f"La edad mínima para inscribirse en {actividad.tipo} es de {edad_minima} años. "
+                }, status=400)
+                            
+    
         
-        if hay_menor and not hay_adulto and actividad.tipo.lower() in ["tirolesa", "palestra"]:
-            return JsonResponse({"error": f"La edad minima para inscribirse sin un adulto es de {edad_minima} años"}, status=400)
+        # if actividad.tipo.lower() in ["tirolesa", "palestra"] and edad_minima > 0:
+        #     return JsonResponse({"error": f"La edad minima para inscribirse en {actividad.tipo} es de {edad_minima} años"}, status=400)
         
         # Crear inscripción
         inscripcion = Inscripcion.objects.create(

@@ -47,6 +47,10 @@ Frontend (React/Vite):
 - react-router-dom ^7.9.4
 - Dev tooling: vite ^7, eslint ^9, @vitejs/plugin-react ^5
 
+## Reglas de estilo de código
+Las reglas de estilo de código seleccionadas para el proyecto fueron:
+- Backend: PEP8 para Python.
+- Frontend: StandarJS para JavaScript.
 
 ## Instalación rápida (Windows)
 

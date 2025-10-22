@@ -1,0 +1,452 @@
+
+
+
+/* ========================================= */
+/* 1. Base y Contenedor Principal (Responsive) */
+/* ========================================= */
+.formulario-container {
+    /* Mantiene el fondo y centrado, asegura ocupar toda la vista */
+    background-image: url('../../main1.jpg'); 
+    background-size: cover;
+    background-position: center; /* Simplificado */
+    background-repeat: no-repeat; 
+    min-height: 100vh; /* Uso de min-height para manejar contenido largo */
+    width: 100vw; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; 
+    padding: 2rem 1rem; /* Agregado padding vertical y horizontal para móviles */
+    box-sizing: border-box; /* Asegura que padding no afecte el width/height */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Fuente más moderna */
+}
+
+/* ========================================= */
+/* 2. Estilo del Formulario (Acrílico Glassmorphism) */
+/* ========================================= */
+.inscripcion-form {
+    background: rgba(255, 255, 255, 0.85); /* Un poco menos de transparencia para mejor legibilidad */
+    backdrop-filter: blur(12px); /* Un desenfoque más fuerte */
+    
+    padding: 3rem 2rem; /* Aumento de padding para un look más "premium" */
+    border-radius: 24px; /* Un redondeado más moderno */
+    
+    /* Sombra más profunda y con color sutil del verde */
+    box-shadow: 0 12px 40px rgba(46, 125, 50, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.6); 
+    
+    width: 100%; /* Ocupa el 100% del espacio disponible */
+    max-width: 450px; /* Aumento del ancho máximo para mejor experiencia en escritorio */
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
+    
+    border: 1px solid rgba(255, 255, 255, 0.7); /* Borde más visible */
+}
+
+/* Reducción del ancho del formulario en pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .inscripcion-form {
+        max-width: 95%;
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+    }
+}
+
+/* ========================================= */
+/* 3. Estructura y Tipografía */
+/* ========================================= */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Espaciado entre campos aumentado */
+}
+
+h2, h3 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+    color: #4caf50; /* Tono de verde ligeramente más claro para subtítulos */
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #333; /* Color más oscuro para el texto */
+    font-size: 0.95rem;
+}
+
+/* ========================================= */
+/* 4. Inputs y Selects Estilizados */
+/* ========================================= */
+input, select {
+    width: 100%;
+    padding: 0.75rem; /* Aumento de padding para mejor 'tappability' en móviles */
+    border-radius: 10px; /* Redondeado sutilmente más grande */
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    box-sizing: border-box; /* Crucial para width: 100% */
+}
+
+input:focus, select:focus {
+    border-color: #4caf50; /* Verde más vivo al enfocar */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15); /* Sombra de enfoque moderna */
+    outline: none; /* Eliminar el contorno por defecto del navegador */
+}
+
+.error {
+    border-color: #e57373 !important; /* Rojo más suave */
+    background-color: #ffebee !important; /* Fondo rojo muy sutil */
+}
+
+.mensaje-error {
+    color: #c62828; /* Rojo más profundo */
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: block;
+    margin-top: 0.3rem;
+}
+
+/* ========================================= */
+/* 5. Contenedores Específicos (MODIFICACIÓN PARA ACORDEÓN) */
+/* ========================================= */
+.persona-card {
+    background-color: #e8f5e9; /* Fondo verde muy suave */
+    border: 1px solid #a5d6a7; /* Borde más definido */
+    border-left: 5px solid #4caf50; /* Borde de color para destacar */
+    border-radius: 10px;
+    padding: 0; /* Padding movido al header/content */
+    margin-top: 1.5rem; 
+    overflow: hidden; /* Oculta el contenido cuando no es visible */
+    transition: all 0.3s ease;
+}
+
+.persona-card.error-card {
+    border-color: #e57373;
+    border-left: 5px solid #c62828; /* Rojo más profundo para indicar error */
+    box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.2);
+}
+
+.persona-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo ligero para el header */
+    transition: background-color 0.2s ease;
+}
+
+.persona-header:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.persona-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.error-indicator {
+    color: #c62828;
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.toggle-icon {
+    font-weight: 700;
+    color: #4caf50;
+    transition: transform 0.3s ease;
+}
+
+/* 🚩 Clases para el contenido Desplegable (Acordeón) */
+.persona-content {
+    padding: 0 1.2rem; /* Padding horizontal */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Espacio entre inputs dentro del acordeón */
+}
+
+/* Estado ABIERTO */
+.persona-card.abierta .persona-content {
+    max-height: 500px; /* Suficientemente grande para el contenido */
+    padding: 1.2rem; /* Padding completo para mostrar el contenido */
+    padding-top: 0; /* Ajuste para que no se duplique con el header */
+}
+
+.persona-card.abierta .persona-header {
+    background-color: #e8f5e9; /* Mantiene el color del fondo */
+}
+
+/* La clase .nota se mantiene pero la hago más pequeña para el acordeón */
+.nota {
+    font-size: 0.8rem;
+    color: #666;
+    padding-top: 0.5rem;
+    text-align: center;
+}
+
+/* ========================================= */
+/* 6. Botones de Acción (Submit) */
+/* ========================================= */
+form button[type="submit"] {
+    width: 100%;
+    margin-top: 1.5rem; /* Espacio extra antes del botón */
+    background: linear-gradient(135deg, #43a047, #388e3c); /* Degradado más pronunciado */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem; /* Tamaño de fuente ligeramente mayor */
+    font-weight: 700;
+    cursor: pointer;
+    padding: 1.1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase; /* Mayúsculas para darle más impacto */
+    letter-spacing: 0.5px;
+}
+
+form button[type="submit"]:hover {
+    background: linear-gradient(135deg, #388e3c, #2e7d32);
+    transform: translateY(-3px); /* Efecto de "levantamiento" más notable */
+    box-shadow: 0 8px 20px rgba(67, 160, 71, 0.4); /* Sombra de hover más fuerte */
+}
+
+/* ========================================= */
+/* 7. Términos y Condiciones */
+/* ========================================= */
+.terminos-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    flex-wrap: wrap; /* Asegura que el texto y checkbox se envuelvan si es necesario */
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #43a047;
+    flex-wrap: nowrap;
+}
+
+.checkbox-label input {
+    width: 16px;
+    height: 16px;
+    accent-color: #43a047;
+}
+
+.link-terminos {
+    color: #2e7d32;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none; /* Quitamos el underline por defecto */
+    border-bottom: 2px solid #66bb6a; /* Nuevo estilo de underline sutil */
+    transition: color 0.3s ease, border-color 0.3s ease;
+    padding-bottom: 1px;
+}
+
+.link-terminos:hover {
+    color: #1b5e20;
+    border-bottom-color: #1b5e20;
+}
+
+/* ========================================= */
+/* 8. Botones de Actividades (Responsive Flex) */
+/* ========================================= */
+.botones-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem; /* Espaciado ligeramente ajustado */
+    justify-content: center; /* Centrado para que se vean bien */
+    margin: 1rem 0; /* Eliminamos el margen lateral fijo */
+}
+
+.boton-toggle {
+    flex-grow: 1; /* Permite que los botones crezcan y ocupen el espacio */
+    min-width: 120px; /* Ancho mínimo para evitar que se aplasten demasiado */
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.boton-toggle:hover:not(.inactivo) {
+    background-color: #e8f5e9;
+    border-color: #a5d6a7;
+}
+
+.boton-toggle.inactivo {
+    background-color: #eceff1 !important;
+    color: #90a4ae !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.boton-toggle.activo {
+    background: linear-gradient(45deg, #4caf50, #66bb6a) !important;
+    color: white !important;
+    border-color: #388e3c;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+    transform: translateY(-1px);
+}
+
+.actividad-seleccionada {
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
+    color: #2e7d32;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 18px; /* Redondeado más grande */
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2); /* Sombra más fuerte */
+    width: 95%; /* Mejor en móvil */
+    max-width: 600px; /* Más espacio para leer los términos */
+    padding: 2.5rem;
+}
+
+.modal-texto {
+    max-height: 70vh; /* Se ajusta a la altura de la vista */
+    overflow-y: auto;
+    padding-right: 1rem; /* Espacio para la barra de desplazamiento */
+    /* Estilos de scrollbar modernos (Webkit) */
+    scrollbar-width: thin;
+    scrollbar-color: #4caf50 #f0f0f0;
+}
+
+.modal-texto::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-texto::-webkit-scrollbar-thumb {
+    background-color: #4caf50;
+    border-radius: 10px;
+}
+
+.modal-texto h4 {
+    color: #2e7d32;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+.modal-texto p,
+.modal-texto li {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.modal-botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-principal, .btn-secundario {
+    flex-grow: 1; /* En móviles, crecen para ocupar el espacio */
+    max-width: 180px; /* Límite para escritorio */
+    text-align: center;
+}
+
+/* ========================================= */
+/* 10. Toasts (Notificaciones) */
+/* ========================================= */
+.toast {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+
+    background-color: #ffffff;
+    padding: 1rem 1.7rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Iconos para los toasts */
+.toast::before {
+    content: "❌"; 
+    font-size: 1.2rem;
+}
+
+.toast.error::before {
+    content: "❌"; 
+}
+
+.toast.warning::before {
+    content: "⚠️"; 
+}
+
+.toast.success {
+    border-left: 5px solid #4caf50;
+}
+/* ... otros estilos de toast se mantienen */
+
+/* ========================================= */
+/* 11. Media Query Específica para Teléfonos */
+/* ========================================= */
+@media (max-width: 600px) {
+    .formulario-container {
+        padding: 1rem 0.5rem; /* Menos padding en los bordes de la pantalla */
+        align-items: flex-start; /* Permite que el contenido empiece arriba si es largo */
+    }
+
+    .inscripcion-form {
+        padding: 1.5rem 1.2rem;
+        border-radius: 16px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    form {
+        gap: 1rem;
+    }
+    
+    .persona-card {
+        padding: 1rem;
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .modal-botones {
+        flex-direction: column; /* Botones del modal apilados en móvil */
+        gap: 0.8rem;
+    }
+
+    .btn-principal, .btn-secundario {
+        max-width: 100%;
+    }
+}

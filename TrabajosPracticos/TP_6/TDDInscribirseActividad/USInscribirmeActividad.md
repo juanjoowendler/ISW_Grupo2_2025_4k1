@@ -7,10 +7,14 @@ Criterios de Aceptación:
 ● Debe requerir seleccionar una actividad del conjunto de actividades de la lista de “Tirolesa”,
 “Safari”, “Palestra” y “Jardinería”, siempre y cuando tengan cupos disponibles para el horario
 seleccionado
+
 ● Debe requerir seleccionar el horario dentro de los disponibles
+
 ● Debe indicar la cantidad de personas que participaran de la actividad
+
 ● Para cada persona que participa, debe ingresar los datos del visitante: nombre, DNI, edad y talla
 de vestimenta si la actividad lo demanda
+
 ● Debe requerir aceptar los términos y condiciones específicos de la actividad en la que
 participarán.
 
